@@ -2,6 +2,7 @@
 Accepts Churchbuilder attendance spreadsheets and creates a new spreadsheet with the attendance totals over the given period.
 
 Usage:
+
 Ensure that Churchbuilder generated .ods files are in the same directory as totalAttendance.py
 Initiate the program and enter as many registers that you'd like to appear together in the final spreadsheet.
 Note - group names will appear as column headers in the final spreadsheet
