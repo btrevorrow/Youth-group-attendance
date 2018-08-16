@@ -11,7 +11,6 @@ this data.
 """
 
 import pyexcel, openpyxl, os, sys, re
-print(pyexcel.__file__)
 from openpyxl.utils import get_column_letter
 
 
