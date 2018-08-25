@@ -12,6 +12,7 @@ this data.
 
 import pyexcel, openpyxl, os, sys, re
 from openpyxl.utils import get_column_letter
+from openpyxl.styles import Font
 
 
 def file_input():
@@ -126,7 +127,14 @@ def write_totals_sheet(attendance, groups):
     totalsSheet = wb.active
     #group names as column headers
     for i in range(len(groups)):
+        totalsSheet.cell(1,i+2).font = Font(name = 'Calibri', bold = True)
         totalsSheet.cell(1,i+2).value = groups[i]
+        #set column width
+        col = get_column_letter(i+2)
+        totalsSheet.column_dimensions[col].width = len(groups[i])
+        
+    #width of name column same as longest name
+    totalsSheet.column_dimensions['A'].width = len(max(attendance, key = len))
     #enter data row by row
     row = 2
     column = 1
