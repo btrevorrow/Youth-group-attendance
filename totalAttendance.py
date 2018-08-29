@@ -131,7 +131,7 @@ def write_totals_sheet(attendance, groups):
         totalsSheet.cell(1,i+2).value = groups[i]
         #set column width
         col = get_column_letter(i+2)
-        totalsSheet.column_dimensions[col].width = len(groups[i])
+        totalsSheet.column_dimensions[col].width = len(groups[i]) + 1
         
     #width of name column same as longest name
     totalsSheet.column_dimensions['A'].width = len(max(attendance, key = len))
