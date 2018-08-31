@@ -5,9 +5,9 @@ Created on Mon Aug 13 14:39:40 2018
 
 @author: btrev
 
-Accepts Churchbuilder attendance spreadsheets, calculates the total attendance
-for each individual over the given period and builds a new spreadsheet from
-this data.
+Functions which receive a register: a group name and a .ods file name. Then
+retrieve data from attendance spreadsheets, add the totals and write to a new
+spreadsheet.
 """
 
 import pyexcel, openpyxl, os, sys, re
@@ -75,7 +75,7 @@ def check_dates(registers):
             datecheck = dateRegex.search(date)
             if datecheck == None:
                 raise Exception("Incorrect spreadsheet format for '{0}': row 1"
-                                ' must be dates only.'.format(filename))
+                        ' must be dates only.'.format(filename.strip('.xlsx')))
     return
 
 def check_names(registers):
@@ -90,7 +90,7 @@ def check_names(registers):
             namecheck = nameRegex.search(name)
             if namecheck == None:
                 raise Exception("Incorrect spreadsheet format for '{0}': colum"
-                                'n 1 must be names only.'.format(filename))
+                    'n 1 must be names only.'.format(filename.strip('.xlsx')))
     return
 
 def check_Ys(registers):
@@ -107,7 +107,7 @@ def check_Ys(registers):
                 if cell.value != 'Y' and cell.value != None:
                     raise Exception("Incorrect spreadsheet format for '{0}': "
                                     "data must consist of 'Y's and empty cells"
-                                    'only.'.format(filename))
+                                    'only.'.format(filename.strip('.xlsx')))
     return
 
 def get_names(registers):
@@ -132,7 +132,6 @@ def sum_attendance_data(attendance, registers):
     attendance and stores the data in the attendance dictionary.
     """
     for group, filename in registers.items():
-        print(group)
         sheet = openpyxl.load_workbook(filename).active
         #find reference to bottom right corner cell
         max_column_letter = get_column_letter(sheet.max_column)
@@ -142,7 +141,6 @@ def sum_attendance_data(attendance, registers):
             for cell in row[1:]:
                 #count the attendance for each name
                 if cell.value == 'Y':
-                    print(name, ':', attendance[name])
                     attendance[name][group] += 1
     return
 
@@ -179,7 +177,7 @@ def gather_attendance_data():
     
     return (attendance, groups)
 
-def write_totals_sheet(attendance, groups):
+def write_totals_sheet(attendance, groups, saveName):
     """
     Writes the total attendance data to a new spreadsheet. Column 1 is names
     row 1 is group names.
@@ -208,7 +206,7 @@ def write_totals_sheet(attendance, groups):
             totalsSheet.cell(row,column).value = attVal
         row = row + 1
     
-    wb.save('Total Attendance.xlsx')
+    wb.save(saveName)
             
 def main():
     attendance, groups = gather_attendance_data()
